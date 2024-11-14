@@ -3,33 +3,26 @@ import os
 import random
 import bcrypt
 
-# Function to hash a password
 def hash_password(password):
     salt = bcrypt.gensalt()
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
     return hashed_password
 
-# Function to check a password against a hashed password
 def check_password(hashed_password, user_password):
     return bcrypt.checkpw(user_password.encode('utf-8'), hashed_password)
 
-# Function to load the leaderboard from a JSON file
 def load_leaderboard(filename='leaderboard.json'):
     try:
         with open(filename, 'r') as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
-        # If the file is missing, not properly formatted, or empty, return an empty dictionary
         return {}
 
-# Function to save the leaderboard to a JSON file
 def save_leaderboard(leaderboard, filename='leaderboard.json'):
     with open(filename, 'w') as f:
         json.dump(leaderboard, f, indent=4)
 
-# Function to update the leaderboard with a player's score
 def update_leaderboard(leaderboard, name, miles_traveled):
-    # Only update the leaderboard if the new score is higher than the current score
     if name in leaderboard and miles_traveled > leaderboard[name]:
         leaderboard[name] = miles_traveled
         save_leaderboard(leaderboard)
@@ -37,28 +30,23 @@ def update_leaderboard(leaderboard, name, miles_traveled):
         leaderboard[name] = miles_traveled
         save_leaderboard(leaderboard)
 
-# Function to display the leaderboard
 def display_leaderboard(leaderboard):
     sorted_leaderboard = sorted(leaderboard.items(), key=lambda x: x[1], reverse=True)
     print("Leaderboard:")
     for i, (player, miles_traveled) in enumerate(sorted_leaderboard, start=1):
         print(f"{i}. {player}: {miles_traveled}")
 
-# Function to initialize the leaderboard file
 def initialize_leaderboard(filename='leaderboard.json'):
     if not os.path.isfile(filename):
         with open(filename, 'w') as f:
             json.dump({}, f)
 
-
-# Function to create a new user account
 def create_user():
     users = {}
     try:
         with open('users.json', 'r') as f:
             users = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
-        # If the file is missing or not properly formatted, create an empty dictionary
         pass
 
     username = input("Please enter your username: ")
@@ -76,7 +64,6 @@ def create_user():
 
     return None
 
-# Function to handle user login
 def login():
     try:
         with open('users.json', 'r') as f:
@@ -95,7 +82,6 @@ def login():
         print("Invalid username or password.")
         return None
 
-# Function to save score to user's account
 def save_score_to_user(username, score):
     try:
         with open('users.json', 'r') as f:
@@ -112,10 +98,8 @@ def save_score_to_user(username, score):
     else:
         print("User not found.")
 
-# Initialize the leaderboard file
 initialize_leaderboard()
 
-# Game variables
 miles_traveled = 0
 water_drank = 0
 energy = 100
@@ -128,9 +112,7 @@ name = None
 done = True
 has_printed = False
 
-# Game loop
 while done:        
-    # Login or create a new account
     if name is None:
         print("1. Login")
         print("2. Create Account")
@@ -152,7 +134,6 @@ while done:
             print("Invalid choice.")
         continue
 
-    # Game logic here
     if temperature > 85:
         print("it is gettin hot in here")
     if temperature < 40:
@@ -172,10 +153,10 @@ while done:
         print("temperature:", temperature, "degrees fahrenheit")
         print("")
         done = False
-        leaderboard = load_leaderboard()  # Load the leaderboard
-        update_leaderboard(leaderboard, name, miles_traveled)  # Update the leaderboard
-        display_leaderboard(leaderboard)  # Display the leaderboard
-        save_score_to_user(name, miles_traveled)  # Save score to user's account
+        leaderboard = load_leaderboard()
+        update_leaderboard(leaderboard, name, miles_traveled)
+        display_leaderboard(leaderboard)
+        save_score_to_user(name, miles_traveled)
         break
     if temperature < 30:
         print("GAME OVER")
@@ -192,10 +173,10 @@ while done:
         print("temperature:", temperature, "degrees fahrenheit")
         print("")
         done = False
-        leaderboard = load_leaderboard()  # Load the leaderboard
-        update_leaderboard(leaderboard, name, miles_traveled)  # Update the leaderboard
-        display_leaderboard(leaderboard)  # Display the leaderboard
-        save_score_to_user(name, miles_traveled)  # Save score to user's account
+        leaderboard = load_leaderboard()
+        update_leaderboard(leaderboard, name, miles_traveled)
+        display_leaderboard(leaderboard)
+        save_score_to_user(name, miles_traveled)
         break
     if energy < 0:
         energy = 0
@@ -225,10 +206,10 @@ while done:
         print("temperature:", temperature, "degrees fahrenheit")
         print("")
         done = False
-        leaderboard = load_leaderboard()  # Load the leaderboard
-        update_leaderboard(leaderboard, name, miles_traveled)  # Update the leaderboard
-        display_leaderboard(leaderboard)  # Display the leaderboard
-        save_score_to_user(name, miles_traveled)  # Save score to user's account
+        leaderboard = load_leaderboard()
+        update_leaderboard(leaderboard, name, miles_traveled)
+        display_leaderboard(leaderboard)
+        save_score_to_user(name, miles_traveled)
         break
     if energy > 100:
         energy = 100
@@ -248,10 +229,10 @@ while done:
         print("temperature:", temperature, "degrees fahrenheit")
         print("")
         done = False
-        leaderboard = load_leaderboard()  # Load the leaderboard
-        update_leaderboard(leaderboard, name, miles_traveled)  # Update the leaderboard
-        display_leaderboard(leaderboard)  # Display the leaderboard
-        save_score_to_user(name, miles_traveled)  # Save score to user's account
+        leaderboard = load_leaderboard() 
+        update_leaderboard(leaderboard, name, miles_traveled)
+        display_leaderboard(leaderboard)
+        save_score_to_user(name, miles_traveled)
         break
     if thirst > 2:
         print("your getting thirsty")
@@ -271,10 +252,10 @@ while done:
         print("temperature:", temperature, "degrees fahrenheit")
         print("")
         done = False
-        leaderboard = load_leaderboard()  # Load the leaderboard
-        update_leaderboard(leaderboard, name, miles_traveled)  # Update the leaderboard
-        display_leaderboard(leaderboard)  # Display the leaderboard
-        save_score_to_user(name, miles_traveled)  # Save score to user's account
+        leaderboard = load_leaderboard()
+        update_leaderboard(leaderboard, name, miles_traveled)
+        display_leaderboard(leaderboard)
+        save_score_to_user(name, miles_traveled)
         break
     if water_left < 1:
         print("you ran out of water")
@@ -322,9 +303,9 @@ while done:
                 print("temperature:", temperature, "degrees fahrenheit")
                 print("")
                 print("")
-                leaderboard = load_leaderboard()  # Load the leaderboard
-                update_leaderboard(leaderboard, name, miles_traveled)  # Update the leaderboard
-                display_leaderboard(leaderboard)  # Display the leaderboard
+                leaderboard = load_leaderboard()
+                update_leaderboard(leaderboard, name, miles_traveled)
+                display_leaderboard(leaderboard)
                 done = False
                 break
             elif end == 'n':
@@ -414,10 +395,9 @@ while done:
             print("")
         elif choice == 'V' or choice == 'v':
             print("")
-            leaderboard = load_leaderboard()  # Load the leaderboard
-            update_leaderboard(leaderboard, name, miles_traveled)  # Update the leaderboard
-            display_leaderboard(leaderboard)  # Display the leaderboard
-    # ... (game logic code)
+            leaderboard = load_leaderboard()
+            update_leaderboard(leaderboard, name, miles_traveled)
+            display_leaderboard(leaderboard)
 
     if miles_traveled in range(100, 130) and not has_printed:
         has_printed = True
@@ -441,9 +421,9 @@ while done:
             print("turns survived:", turn)
             print("temperature:", temperature, "degrees fahrenheit")
             print("")
-            leaderboard = load_leaderboard()  # Load the leaderboard
-            update_leaderboard(leaderboard, name, miles_traveled)  # Update the leaderboard
-            display_leaderboard(leaderboard)  # Display the leaderboard
+            leaderboard = load_leaderboard()
+            update_leaderboard(leaderboard, name, miles_traveled)
+            display_leaderboard(leaderboard)
             done = False
         if complete == 'y' or complete == 'Y':
             print("")
@@ -484,7 +464,7 @@ while done:
             print("turns survived:", turn)
             print("temperature:", temperature, "degrees fahrenheit")
             print("")
-            leaderboard = load_leaderboard()  # Load the leaderboard
-            update_leaderboard(leaderboard, name, miles_traveled)  # Update the leaderboard
-            display_leaderboard(leaderboard)  # Display the leaderboard     
+            leaderboard = load_leaderboard()
+            update_leaderboard(leaderboard, name, miles_traveled)
+            display_leaderboard(leaderboard)
             done = False
